@@ -84,7 +84,7 @@ def parse_direntry(dir_entry):
     (child_id, ) = struct.unpack_from('<l', dir_entry[76:80])
     (starting_sector, ) = struct.unpack_from('<L', dir_entry[116:120])
     (stream_size, ) = struct.unpack_from('<Q', dir_entry[120:128])
-    record = {'name_decoded': name.decode('utf-16').rstrip('\x00'),
+    record = {'name_decoded': name_raw.decode('utf-16').rstrip('\x00'),
               'name': name,
               'name_length': name_length,
               'object_type': object_type,
@@ -228,4 +228,18 @@ def run(target):
             logger.info('File is Excel')
             break
 
-    return directory
+    output = list()
+    start = True
+    directory.reverse()
+    for entry in directory:
+        if start:
+            if not entry['object_type']:
+                continue
+            else:
+                output.append(entry)
+                start = False
+        else:
+            output.append(entry)
+    output.reverse()
+
+    return output
