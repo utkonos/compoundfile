@@ -73,11 +73,11 @@ def get_count(count_raw):
 
 def parse_direntry(dir_entry):
     """Parse one directory entry."""
-    name = dir_entry[:64]
+    name = binascii.hexlify(dir_entry[:64]).upper().decode()
     logger.debug('Directory entry name: {}'.format(name.decode('utf-16')))
     (name_length, ) = struct.unpack_from('<H', dir_entry[64:66])
-    (object_type, ) = struct.unpack_from('<B', dir_entry[66:67])
-    (color_flag, ) = struct.unpack_from('<B', dir_entry[67:68])
+    (object_type, ) = struct.unpack_from('<B', dir_entry[66])
+    (color_flag, ) = struct.unpack_from('<B', dir_entry[67])
     (left_sibling, ) = struct.unpack_from('<l', dir_entry[68:72])
     (right_sibling, ) = struct.unpack_from('<l', dir_entry[72:76])
     (child_id, ) = struct.unpack_from('<l', dir_entry[76:80])
@@ -91,10 +91,10 @@ def parse_direntry(dir_entry):
               'left_sibling': left_sibling,
               'right_sibling': right_sibling,
               'child_id': child_id,
-              'clsid': dir_entry[80:96],
-              'state': dir_entry[96:100],
-              'creation_time': dir_entry[100:108],
-              'modification_time': dir_entry[108:116],
+              'clsid': binascii.hexlify(dir_entry[80:96]).upper().decode(),
+              'state': binascii.hexlify(dir_entry[96:100]).upper().decode(),
+              'creation_time': binascii.hexlify(dir_entry[100:108]).upper().decode(),
+              'modification_time': binascii.hexlify(dir_entry[108:116]).upper().decode(),
               'starting_sector': starting_sector,
               'stream_size': stream_size}
 
