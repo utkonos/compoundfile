@@ -7,7 +7,7 @@ import argparse
 import json
 import pathlib
 
-from parser import run
+from .parser import run
 
 
 def main():
