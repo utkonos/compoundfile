@@ -73,8 +73,9 @@ def get_count(count_raw):
 
 def parse_direntry(dir_entry):
     """Parse one directory entry."""
-    name = binascii.hexlify(dir_entry[:64]).upper().decode()
-    logger.debug('Directory entry name: {}'.format(name.decode('utf-16')))
+    name_raw = dir_entry[:64]
+    name = binascii.hexlify(name_raw).upper().decode()
+    logger.debug('Directory entry name: {}'.format(name_raw.decode('utf-16')))
     (name_length, ) = struct.unpack_from('<H', dir_entry[64:66])
     (object_type, ) = struct.unpack_from('<B', dir_entry[66])
     (color_flag, ) = struct.unpack_from('<B', dir_entry[67])
